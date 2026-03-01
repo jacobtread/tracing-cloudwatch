@@ -12,6 +12,8 @@ async fn main() {
         .with(filter::LevelFilter::INFO)
         .with(
             tracing_cloudwatch::layer()
+                .with_code_location(true)
+                .with_target(false)
                 .with_client(
                     cw_client,
                     tracing_cloudwatch::ExportConfig::default()
@@ -19,9 +21,7 @@ async fn main() {
                         .with_interval(Duration::from_secs(1))
                         .with_log_group_name("tracing-cloudwatch")
                         .with_log_stream_name("stream-1"),
-                )
-                .with_code_location(true)
-                .with_target(false),
+                ),
         )
         .init();
 

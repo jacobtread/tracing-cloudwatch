@@ -54,16 +54,17 @@ async fn main() {
 
     tracing_subscriber::registry::Registry::default()
         .with(
-            tracing_cloudwatch::layer().with_client(
-                cw_client,
-                tracing_cloudwatch::ExportConfig::default()
-                    .with_batch_size(5)
-                    .with_interval(std::time::Duration::from_secs(1))
-                    .with_log_group_name("tracing-cloudwatch")
-                    .with_log_stream_name("stream-1"),
-            )
-            .with_code_location(true)
-            .with_target(false),
+            tracing_cloudwatch::layer()
+                .with_code_location(true)
+                .with_target(false)
+                .with_client(
+                    cw_client,
+                    tracing_cloudwatch::ExportConfig::default()
+                        .with_batch_size(5)
+                        .with_interval(std::time::Duration::from_secs(1))
+                        .with_log_group_name("tracing-cloudwatch")
+                        .with_log_stream_name("stream-1"),
+                ),
         )
         .init();
 }
